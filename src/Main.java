@@ -4,25 +4,27 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-            Sender sx = new Sender();
+
 
             Scanner sc = new Scanner(System.in);
 
             int choice;
 
             while(true) {
-                System.out.print("1.Parity Check\n2.Checksum\nEnter choice: ");
+                System.out.print("1.Parity Check\n2.Checksum\n3.CRC\nEnter choice: ");
                 choice = sc.nextInt();
-                if (choice >=0 || choice < 3) break;
+                if (choice >=0 || choice <= 3) break;
                 else System.out.println();
             }
 
 
             String type = switch (choice) {
-                case 1 -> "SingleBit";
-                case 2 -> "MultiBit";
+                case 1 -> "ParityCheck";
+                case 2 -> "CheckSum";
+                case 3 -> "CRC";
                 default -> "";
             };
+            Sender sx = new Sender(type);
 
 
             Receiver rx = Network.transmit(sx, type);

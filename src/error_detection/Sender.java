@@ -1,15 +1,24 @@
 package error_detection;
-
 import java.util.Scanner;
 
 public class Sender {
     public StringBuffer data;
     public StringBuffer extra;
 
-    public Sender () {
+    public StringBuffer crcGenerater;
+
+    public Sender (String type) {
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter the data: ");
         this.data = new StringBuffer(sc.nextLine());
+        if(type=="CRC"){
+            System.out.print("Enter the generator sequence: ");
+            this.crcGenerater=new StringBuffer(sc.next());
+        }
+        else{
+            this.crcGenerater=new StringBuffer();
+        }
+
 //        sc.close();
     }
 
@@ -26,5 +35,9 @@ public class Sender {
 
     public StringBuffer calculateChecksum () {
        return new StringBuffer(Utilities.onesComplement(Utilities.binaryAddition(this.data.substring(0, 4), this.data.substring(4))));
+    }
+
+    public StringBuffer calculateCRC(){
+        return new StringBuffer(Utilities.binaryDivision(this.data.append("0".repeat(this.crcGenerater.length()-1)).toString(),crcGenerater.toString()));
     }
 }

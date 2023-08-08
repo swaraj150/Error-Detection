@@ -4,18 +4,22 @@ import java.util.Random;
 
 public class Network {
     public static Receiver transmit (Sender s, String type) {
-        String data;
+        String data = null;
 
-        if(type == "SingleBit") {
+        if(type == "ParityCheck") {
             s.extra=s.calculateParity();
             data = induceSingleBitError(new String(s.data) + new String(s.extra));
         }
-        else {
+        else if(type=="CheckSum") {
             s.extra=s.calculateChecksum();
             data = induceMultiBitError(new String(s.data) + new String(s.extra));
         }
+        else if(type=="CRC"){
+            s.extra=s.calculateCRC();
+            data=induceMultiBitError(Utilities.binaryAddition(new String(s.data),"0".repeat(s.data.length()-s.extra.length())+new String(s.extra)));
+        }
 
-        return new Receiver(data);
+        return new Receiver(data,s.extra.toString());
     }
 
     private static String induceSingleBitError (String data) {
@@ -26,7 +30,7 @@ public class Network {
             return data;
         }
 
-        StringBuffer newData = new StringBuffer(data);
+        StringBuilder newData = new StringBuilder(data);
         System.out.println("Original data "+newData);
         int pos=rand.nextInt(data.length());
         if (newData.charAt(pos) == '1') newData.replace(pos, pos + 1, "0");
@@ -43,7 +47,7 @@ public class Network {
             return data;
         }
 
-        StringBuffer newData = new StringBuffer(data);
+        StringBuilder newData = new StringBuilder(data);
         System.out.println("Original data "+newData);
         int numberOfBits = rand.nextInt(1,data.length());
         System.out.println("number of flips: "+numberOfBits);
