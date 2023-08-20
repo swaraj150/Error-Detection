@@ -102,8 +102,4 @@ public class Utilities {
         return strip(new StringBuffer(remainder)).equals(new StringBuffer("")) ?"0".repeat(n2):remainder;
     }
 
-    public static void main(String[] args) {
-        System.out.println(binaryAddition("1010000000","0000000011"));
-    }
-
 }
